@@ -11,7 +11,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import { createConnection } from 'typeorm';
 import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS } from '@config';
 import { dbConnection } from '@databases';
-import { Routes } from '@interfaces/routes.interface';
+import { Route } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
 
@@ -20,7 +20,7 @@ class App {
   public env: string;
   public port: string | number;
 
-  constructor(routes: Routes[]) {
+  constructor(routes: Route[]) {
     this.app = express();
     this.env = NODE_ENV || 'development';
     this.port = PORT || 3000;
@@ -35,7 +35,7 @@ class App {
   public listen() {
     this.app.listen(this.port, () => {
       logger.info(`=================================`);
-      logger.info(`======= ENV: ${this.env} =======`);
+      logger.info(`======= ENV: ${this.env} ========`);
       logger.info(`🚀 App listening on the port ${this.port}`);
       logger.info(`=================================`);
     });
@@ -60,7 +60,7 @@ class App {
     this.app.use(cookieParser());
   }
 
-  private initializeRoutes(routes: Routes[]) {
+  private initializeRoutes(routes: Route[]) {
     routes.forEach(route => {
       this.app.use('/', route.router);
     });
