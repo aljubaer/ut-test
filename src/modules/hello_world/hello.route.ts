@@ -4,21 +4,22 @@ import { CreateUserDto, LoginUserDto } from '@modules/user/users.dto';
 import { Route } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
 import authMiddleware from '@/middlewares/auth.middleware';
+import { adminMiddleware } from '@/middlewares/admin.middleware';
+import { HelloController } from './hello.controller';
 
-class AuthRoute implements Route {
-  public path = '/';
+class HelloRoute implements Route {
+  public path = '/hello-world';
   public router = Router();
-  public authController = new AuthController();
+  public helloController = new HelloController();
 
   constructor() {
     this.initializeRoutes();
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}signup`, validationMiddleware(CreateUserDto, 'body'), this.authController.signUp);
-    this.router.post(`${this.path}signin`, validationMiddleware(LoginUserDto, 'body'), this.authController.signIn);
-    this.router.post(`${this.path}logout`, authMiddleware, this.authController.logOut);
+    this.router.get(`${this.path}`, authMiddleware, this.helloController.hello);
+    this.router.get(`/admin${this.path}`, [authMiddleware, adminMiddleware], this.helloController.hello);
   }
 }
 
-export default AuthRoute;
+export default HelloRoute;

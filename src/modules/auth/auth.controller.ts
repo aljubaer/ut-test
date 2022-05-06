@@ -3,6 +3,7 @@ import { BasicUser } from './../user/users.interface';
 import { NextFunction, Request, Response } from 'express';
 import { CreateUserDto } from '@modules/user/users.dto';
 import AuthService from '@modules/auth/auth.service';
+import { RequestWithUser } from './auth.interface';
 
 class AuthController {
   public authService = new AuthService();
@@ -30,17 +31,14 @@ class AuthController {
     }
   };
 
-  // public logOut = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
-  //   try {
-  //     const userData: User = req.user;
-  //     const logOutUserData: User = await this.authService.logout(userData);
-
-  //     res.setHeader('Set-Cookie', ['Authorization=; Max-age=0']);
-  //     res.status(200).json({ data: logOutUserData, message: 'logout' });
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // };
+  public logOut = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      res.setHeader('Set-Cookie', ['Authorization=; Max-age=0']);
+      res.status(200).json({ message: 'User logout' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default AuthController;

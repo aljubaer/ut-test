@@ -1,6 +1,6 @@
 import { LoginUserDto } from './../user/users.dto';
 import request from 'supertest';
-import App from '@app';
+import App from '../../app';
 import { CreateUserDto } from '@modules/user/users.dto';
 import AuthRoute from '@modules/auth/auth.route';
 
@@ -12,15 +12,14 @@ describe('Testing Auth', () => {
   describe('[POST] /register', () => {
     it('response should have the Create userData', () => {
       const userData: CreateUserDto = {
-        name: 'Test Test',
-        phoneNumber: '+1234567890',
         email: 'test@email.com',
         password: 'q1w2e3r4',
+        role: 'admin',
       };
       const authRoute = new AuthRoute();
       const app = new App([authRoute]);
 
-      return request(app.getServer()).post('/register').send(userData);
+      return request(app.getServer()).post('/signup').send(userData).expect(201);
     });
   });
 
@@ -34,19 +33,19 @@ describe('Testing Auth', () => {
       const authRoute = new AuthRoute();
       const app = new App([authRoute]);
 
-      return request(app.getServer()).post('/login').send(userData).expect(200);
+      return request(app.getServer()).post('/signin').send(userData).expect(200);
     });
   });
 
   // error: StatusCode : 404, Message : Authentication token missing
-  // describe('[POST] /logout', () => {
-  //   it('logout Set-Cookie Authorization=; Max-age=0', () => {
-  //     const authRoute = new AuthRoute();
-  //     const app = new App([authRoute]);
+  describe('[POST] /logout', () => {
+    it('logout Set-Cookie Authorization=; Max-age=0', () => {
+      const authRoute = new AuthRoute();
+      const app = new App([authRoute]);
 
-  //     return request(app.getServer())
-  //       .post('/logout')
-  //       .expect('Set-Cookie', /^Authorization=\;/);
-  //   });
-  // });
+      return request(app.getServer())
+        .post('/logout')
+        .expect('Set-Cookie', /^Authorization=\;/);
+    });
+  });
 });
