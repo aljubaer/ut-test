@@ -117,6 +117,9 @@ definitions:
       password:
         type: string
         description: user Password
+      role: 
+        type: string
+        description: user role
 
 schemes:
  - https

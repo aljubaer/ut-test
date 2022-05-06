@@ -3,7 +3,7 @@ import { verify } from 'jsonwebtoken';
 import { SECRET_KEY } from '@config';
 import { UserEntity } from '@/modules/user/users.entity';
 import { HttpException } from '@exceptions/HttpException';
-import { DataStoredInToken, RequestWithUser } from '@interfaces/auth.interface';
+import { DataStoredInToken, RequestWithUser } from '@modules/auth/auth.interface';
 
 const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   try {
@@ -12,16 +12,16 @@ const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFun
     if (Authorization) {
       const secretKey: string = SECRET_KEY;
       const { id } = (await verify(Authorization, secretKey)) as DataStoredInToken;
-      const findUser = await UserEntity.findOne(id, { select: ['id', 'email', 'password'] });
+      const user = await UserEntity.findOne(id, { select: ['id', 'email', 'role'] });
 
-      if (findUser) {
-        req.user = findUser;
+      if (user) {
+        req.user = user;
         next();
       } else {
         next(new HttpException(401, 'Wrong authentication token'));
       }
     } else {
-      next(new HttpException(404, 'Authentication token missing'));
+      next(new HttpException(400, 'Authentication token missing'));
     }
   } catch (error) {
     next(new HttpException(401, 'Wrong authentication token'));

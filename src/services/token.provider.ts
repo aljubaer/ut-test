@@ -1,7 +1,7 @@
 import { ONE_HOUR, JWT_SECRET } from '../config';
 import { Token, DataStoredInToken } from '@interfaces/token.interface';
 import jwt from 'jsonwebtoken';
-import { TokenData } from '@/interfaces/auth.interface';
+import { TokenData } from '@modules/auth/auth.interface';
 
 export const buildToken = (userId: number): Token => {
   const dataStoredInToken: DataStoredInToken = { id: userId };

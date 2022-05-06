@@ -1,4 +1,4 @@
-import { BasicUser } from '@modules/user/users.interface';
+import { BasicUser, User } from '@modules/user/users.interface';
 import { matchPassword } from '@services/encryption.service';
 import UserService from '@modules/user/users.service';
 import { buildToken, createCookie } from '@services/token.provider';
@@ -19,7 +19,7 @@ class AuthService extends Repository<UserEntity> {
   public async login(userData: LoginUserDto): Promise<{ cookie: string; user: BasicUser }> {
     if (isEmpty(userData)) throw new HttpException(400, 'Invalid credentials');
 
-    const foundUser: BasicUser = await UserEntity.findOne({ where: { email: userData.email } });
+    const foundUser: User = await UserEntity.findOne({ where: { email: userData.email } });
     if (!foundUser) throw new HttpException(401, `Username or password wrong`);
 
     const isPasswordMatching: boolean = await matchPassword(userData.password, foundUser.password);
@@ -28,7 +28,8 @@ class AuthService extends Repository<UserEntity> {
     const tokenData = buildToken(foundUser.id);
     const cookie = createCookie(tokenData);
 
-    return { cookie, user: foundUser };
+    const { password, ...user } = foundUser;
+    return { cookie, user };
   }
 }
 

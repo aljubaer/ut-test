@@ -1,4 +1,3 @@
-import { BasicUser } from './users.interface';
 import { NextFunction, Request, Response } from 'express';
 
 import userService from '@modules/user/users.service';

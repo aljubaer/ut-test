@@ -34,10 +34,7 @@ describe('Testing Auth', () => {
       const authRoute = new AuthRoute();
       const app = new App([authRoute]);
 
-      return request(app.getServer())
-        .post('/login')
-        .send(userData)
-        .expect(200);
+      return request(app.getServer()).post('/login').send(userData).expect(200);
     });
   });
 
