@@ -1,11 +1,11 @@
-# ut-test
+# UT Test
 
 ## Title 
 Sample Node.js api service for authentication and authorization
 
 ## Setup
 Follow the steps:
-- `git clone `
+- `git clone https://github.com/aljubaer/ut-test.git`
 - `cd ut-test`
 - `npm install`
 - `npm run dev`
