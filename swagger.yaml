@@ -10,7 +10,7 @@ paths:
     post: 
       tags:
       - auth
-      summary: Create a new user
+      summary: Create a new user. Role - admin / customer
       parameters: 
       - name: signup
         in: body
